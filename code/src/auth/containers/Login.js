@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { auth } from './firebase';
+import { auth, googleProvider, facebookProvider } from '../../firebase';
 
-class Register extends Component {
+class Login extends Component {
 
   state = {
     email: '',
@@ -17,7 +17,7 @@ class Register extends Component {
 
   handleSubmit = (event) => {
     auth
-    .createUserWithEmailAndPassword(
+    .signInWithEmailAndPassword(
       this.state.email, this.state.password
     )
     .then(response => {
@@ -32,10 +32,39 @@ class Register extends Component {
     event.preventDefault();
   }
 
+  handleGoogleLogin = () => {
+    auth
+    .signInWithPopup(googleProvider)
+    .then(response => {
+      console.log('Response: ', response);
+      this.props.history.push('/');
+    })
+    .catch(error => {
+      console.log(`Error: ${error.code} ${error.message}`);
+    });
+  }
+
+  handleFacebookLogin = () => {
+    auth
+    .signInWithPopup(facebookProvider)
+    .then(response => {
+      console.log('Response: ', response);
+      this.props.history.push('/');
+    })
+    .catch(error => {
+      console.log(`Error: ${error.code} ${error.message}`);
+    });
+  }
+
   render() {
     return(
       <div>
-        <h2>Register:</h2>
+        <h2>Login:</h2>
+        <div>
+          <button onClick={this.handleGoogleLogin}>Login with Google</button>
+          <button onClick={this.handleFacebookLogin}>Login with Facebook</button>
+        </div>
+
         <form onSubmit={this.handleSubmit}>
           <div>
             <input onChange={this.handleChange} type="email" name="email" value={this.state.email} placeholder="E-mail" />
@@ -52,4 +81,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default Login;
