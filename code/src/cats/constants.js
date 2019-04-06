@@ -1,0 +1,2 @@
+export const POPULATE_CATS = 'POPULATE_CATS';
+

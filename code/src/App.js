@@ -7,16 +7,17 @@ import {
 import Register from './auth/containers/Register';
 import Login from './auth/containers/Login';
 import Logout from './auth/containers/Logout';
-import Cats from './Cats';
+import Cats from './cats/containers/Cats';
 import Hello from './Hello';
 import RestrictedRoutes from './RestrictedRoutes';
 import Menu from './ui/components/Menu';
 import Avatar from './Avatar';
 import Upload from './Upload';
 import Notifications from './ui/containers/Notifications';
-import { login, logout } from './auth/actions';
 
 import { auth } from './firebase';
+import { login, logout } from './auth/actions';
+import { showNotifications } from './ui/actions'
 
 class App extends Component {
 
@@ -31,7 +32,8 @@ class App extends Component {
     auth.onAuthStateChanged(user => {
       console.log(user);
       if (user) {
-        this.props.login(user.providerData[0])
+        this.props.login(user.providerData[0]);
+        this.props.showNotifications('Woooow, udało się!')
         // this.setState({
         //   isAuthorized: true,
         //   user: user.providerData[0]
@@ -86,7 +88,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   login: (user) => dispatch(login(user)),
-  logout: () => dispatch(logout())
+  logout: () => dispatch(logout()),
+  showNotifications: (message) => dispatch(showNotifications(message))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
